@@ -42,14 +42,25 @@ SYSTEM_PROMPT = (
 )
 
 # ── Logging ──────────────────────────────────────────────────────────────────
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-)
 logger = logging.getLogger(__name__)
 
 # ── App ─────────────────────────────────────────────────────────────────────
 app = FastAPI(title=BOT_NAME)
+
+
+@app.on_event("startup")
+async def _on_startup():
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s [%(levelname)s] %(message)s",
+        force=True,
+        stream=__import__("sys").stdout,
+    )
+    logger.info("=" * 50)
+    logger.info("Bot iniciado: %s / %s", BOT_NAME, COMPANY_NAME)
+    logger.info("Chatwoot URL: %s", CHATWOOT_URL)
+    logger.info("Modelo: %s | MAX_HISTORIAL: %s | PAUSE_LABEL: %s", OPENROUTER_MODEL, MAX_HISTORIAL, PAUSE_LABEL)
+    logger.info("=" * 50)
 
 
 # ── Helpers ─────────────────────────────────────────────────────────────────
@@ -57,7 +68,8 @@ def ensure_absolute(url: str) -> str:
     if url.startswith("//"):
         return "https:" + url
     if url.startswith("/"):
-        return CHATWOOT_URL + url
+        base = CHATWOOT_URL.rstrip("/")
+        return base + url
     return url
 
 
@@ -309,13 +321,20 @@ async def health():
 
 @app.post("/webhook")
 async def webhook(request: Request):
+    raw = await request.body()
+    logger.info("WEBHOOK RECIBIDO: %s", raw[:500])
     try:
-        payload = await request.json()
+        payload = __import__("json").loads(raw)
     except Exception:
+        logger.error("JSON inválido: %s", raw[:300])
         return {"status": "ignored", "reason": "invalid json"}
 
-    if payload.get("event") != "message_created":
-        return {"status": "ignored", "reason": f"event={payload.get('event')}"}
+    event = payload.get("event")
+    logger.info("Evento: %s | message_type: %s", event, payload.get("message", {}).get("message_type"))
+
+    if event != "message_created":
+        logger.info("Ignorado — evento %s", event)
+        return {"status": "ignored", "reason": f"event={event}"}
 
     msg = payload.get("message", {})
     if msg.get("message_type") != "incoming":
@@ -360,6 +379,8 @@ async def webhook(request: Request):
 
     # ── Content multimodal ───────────────────────────────────────────────
     content_parts = await _build_content(text, attachments)
+    if not content_parts:
+        content_parts = [{"type": "text", "text": "(mensaje vacío)"}]
 
     # ── Llamada al LLM ───────────────────────────────────────────────────
     llm_messages = [{"role": "system", "content": SYSTEM_PROMPT}]
