@@ -330,21 +330,30 @@ async def webhook(request: Request):
         return {"status": "ignored", "reason": "invalid json"}
 
     event = payload.get("event")
-    logger.info("Evento: %s | message_type: %s", event, payload.get("message", {}).get("message_type"))
+    msg = payload.get("message") or payload
+    message_type = msg.get("message_type")
+    logger.info("Evento: %s | message_type: %s", event, message_type)
 
     if event != "message_created":
         logger.info("Ignorado — evento %s", event)
         return {"status": "ignored", "reason": f"event={event}"}
 
-    msg = payload.get("message", {})
-    if msg.get("message_type") != "incoming":
-        return {"status": "ignored", "reason": "not incoming"}
+    is_incoming = (
+        message_type == "incoming"
+        or message_type == 0
+        or message_type == "0"
+    )
+    if not is_incoming:
+        logger.info("Ignorado — message_type=%s no es incoming", message_type)
+        return {"status": "ignored", "reason": f"not incoming ({message_type})"}
 
     conversation_id = (
         payload.get("conversation", {}).get("id")
+        or payload.get("conversation_id")
         or msg.get("conversation_id")
     )
     if not conversation_id:
+        logger.warning("No conversation_id en payload")
         return {"status": "ignored", "reason": "no conversation_id"}
 
     # ── Pause label ─────────────────────────────────────────────────────
