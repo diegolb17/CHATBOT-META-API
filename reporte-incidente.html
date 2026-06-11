@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reporte de Incidente - Chatbot WhatsApp Italocks</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f172a; color: #e2e8f0; line-height: 1.6; padding: 40px 20px; }
+  .container { max-width: 900px; margin: 0 auto; }
+  h1 { font-size: 1.8em; color: #38bdf8; margin-bottom: 8px; }
+  .subtitle { color: #94a3b8; margin-bottom: 32px; font-size: 0.95em; }
+  .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 28px; margin-bottom: 24px; }
+  h2 { font-size: 1.25em; color: #e2e8f0; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+  h2 .icon { font-size: 1.3em; }
+  .timeline { border-left: 2px solid #334155; padding-left: 20px; margin: 16px 0; }
+  .tl-item { margin-bottom: 16px; position: relative; }
+  .tl-item::before { content: ''; width: 10px; height: 10px; background: #38bdf8; border-radius: 50%; position: absolute; left: -26px; top: 6px; }
+  .tl-item.error::before { background: #ef4444; }
+  .tl-item.ok::before { background: #22c55e; }
+  .tl-time { font-size: 0.8em; color: #64748b; }
+  .tl-desc { font-size: 0.95em; }
+  .error-box { background: #450a0a; border: 1px solid #7f1d1d; border-radius: 8px; padding: 16px; margin: 16px 0; font-family: 'Courier New', monospace; font-size: 0.82em; color: #fca5a5; overflow-x: auto; }
+  .code { background: #0f172a; border-radius: 6px; padding: 2px 6px; font-family: monospace; font-size: 0.9em; color: #38bdf8; }
+  ul { padding-left: 20px; }
+  li { margin-bottom: 8px; font-size: 0.95em; }
+  .danger { color: #ef4444; font-weight: 600; }
+  .success { color: #22c55e; font-weight: 600; }
+  .warn { color: #f59e0b; font-weight: 600; }
+  .steps { counter-reset: step; }
+  .steps li { counter-increment: step; list-style: none; margin-bottom: 14px; }
+  .steps li::before { content: counter(step); background: #38bdf8; color: #0f172a; font-weight: 700; width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-right: 10px; font-size: 0.85em; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+  th { text-align: left; color: #94a3b8; font-weight: 600; padding: 8px 0; border-bottom: 1px solid #334155; font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.05em; }
+  td { padding: 10px 0; border-bottom: 1px solid #1e293b; font-size: 0.93em; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.78em; font-weight: 600; }
+  .badge-red { background: #450a0a; color: #fca5a5; }
+  .badge-green { background: #052e16; color: #86efac; }
+  .badge-blue { background: #0c4a6e; color: #7dd3fc; }
+  .footer { text-align: center; color: #475569; font-size: 0.83em; margin-top: 32px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Reporte de Incidente</h1>
+<p class="subtitle">Chatbot WhatsApp &mdash; Grupo Italocks<br>Fecha: 9 al 11 de junio de 2026 &middot; Hora peruana (UTC-5)</p>
+
+<!-- ====== RESUMEN ====== -->
+<div class="card">
+  <h2><span class="icon">&#9888;</span> Resumen ejecutivo</h2>
+  <p>El bot dej&oacute; de recibir mensajes de WhatsApp el <strong>9 de junio a las 7:49 PM</strong> (hora Per&uacute;) tras la creaci&oacute;n accidental de un inbox de WhatsApp Cloud duplicado en Chatwoot. Meta rechaz&oacute; el intento de sobreescribir el webhook callback y la comunicaci&oacute;n entre Meta, Chatwoot y el bot qued&oacute; interrumpida. <strong>El bot en s&iacute; nunca fall&oacute;</strong> &mdash; el problema est&aacute; en la cadena Meta &rarr; Chatwoot.</p>
+</div>
+
+<!-- ====== CRONOLOGIA ====== -->
+<div class="card">
+  <h2><span class="icon">&#9201;</span> Cronolog&iacute;a del incidente (hora Per&uacute; UTC-5)</h2>
+
+  <div class="timeline">
+    <div class="tl-item ok">
+      <div class="tl-time">4:30 PM &mdash; 9 junio</div>
+      <div class="tl-desc"><strong>&Uacute;ltima respuesta exitosa del bot.</strong> Proces&oacute; mensaje de Josie, llam&oacute; a OpenRouter, gener&oacute; respuesta y la entreg&oacute; a Chatwoot. Todo 200 OK.</div>
+    </div>
+    <div class="tl-item ok">
+      <div class="tl-time">6:46 PM</div>
+      <div class="tl-desc">Inicio de sesi&oacute;n de Joselinne en Chatwoot desde IP <span class="code">38.253.188.117</span>.</div>
+    </div>
+    <div class="tl-item error">
+      <div class="tl-time">7:49 PM</div>
+      <div class="tl-desc"><strong>Creaci&oacute;n accidental de inbox duplicado</strong> desde la misma sesi&oacute;n/IP. Chatwoot intent&oacute; registrar un nuevo WhatsApp Cloud inbox con el n&uacute;mero <span class="code">+51974752677</span>.</div>
+    </div>
+    <div class="tl-item error">
+      <div class="tl-time">7:49 PM</div>
+      <div class="tl-desc"><strong>Meta rechaz&oacute; el webhook.</strong> Error <span class="code">(#100) Before override the current callback uri, your app must be subscribed to receive messages for WhatsApp Business Account</span>.</div>
+    </div>
+    <div class="tl-item error">
+      <div class="tl-time">7:49 PM en adelante</div>
+      <div class="tl-desc"><strong>Mensajes dejaron de llegar a Chatwoot</strong> y por lo tanto al bot. Nadie pod&iacute;a recibir mensajes nuevos de WhatsApp en Chatwoot.</div>
+    </div>
+    <div class="tl-item ok">
+      <div class="tl-time">11 junio &mdash; investigaci&oacute;n</div>
+      <div class="tl-desc">Se identific&oacute; la causa ra&iacute;z mediante logs de Chatwoot. El bot est&aacute; intacto. Se intent&oacute; actualizar la API key pero no resuelve el problema de fondo.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== CAUSA RAIZ ====== -->
+<div class="card">
+  <h2><span class="icon">&#128269;</span> Causa ra&iacute;z</h2>
+  <p>El error fatal en los logs de Chatwoot:</p>
+  <div class="error-box">
+    [WHATSAPP] Webhook setup failed: Webhook callback override failed:<br>
+    {"error":{"message":"(#100) Before override the current callback uri,<br>
+    your app must be subscribed to receive messages for WhatsApp Business Account",<br>
+    "type":"OAuthException","code":100}}
+  </div>
+  <p style="margin-top: 16px;">Traducci&oacute;n: Meta bloque&oacute; el intento de Chatwoot de reconfigurar el callback URL porque la aplicaci&oacute;n de Meta <strong>no tiene activa la suscripci&oacute;n al campo <span class="code">messages</span></strong> en los Webhook Fields.</p>
+  <p>Esto ocurri&oacute; porque al crear un inbox nuevo con el mismo n&uacute;mero, Chatwoot intenta sobreescribir el callback URL registrado, y Meta exige que la app ya tenga la suscripci&oacute;n <span class="code">messages</span> activa antes de permitir el override.</p>
+</div>
+
+<!-- ====== SOLUCION ====== -->
+<div class="card">
+  <h2><span class="icon">&#9989;</span> Soluci&oacute;n (requiere acceso a Meta Developer)</h2>
+  <p>El cliente o la persona con acceso al Meta Developer App debe hacer esto <strong>en 2 minutos</strong>:</p>
+  <ol class="steps">
+    <li>Entrar a <a href="https://developers.facebook.com/apps/" style="color:#38bdf8;">https://developers.facebook.com/apps/</a></li>
+    <li>Seleccionar la app de <strong>Italocks / Grupo Italocks</strong></li>
+    <li>Ir a <strong>WhatsApp &gt; Configuration</strong></li>
+    <li>En <strong>Webhook Fields</strong>, asegurarse de que <span class="code">messages</span> est&eacute; <span class="success">tildado (suscrito)</span></li>
+    <li>Verificar que el <strong>Webhook Callback URL</strong> apunte a la URL de Chatwoot y diga <span class="code">Verified</span></li>
+    <li>Volver a Chatwoot &gt; <strong>Settings &gt; Inboxes &gt; WhatsApp Cloud</strong> &gt; editar el inbox existente y guardar. Chatwoot reintentar&aacute; la conexi&oacute;n.</li>
+    <li>Verificar que el webhook del bot en <strong>Inbox Settings &gt; Configuration &gt; Webhook URL</strong> siga apuntando a la URL del bot en EasyPanel.</li>
+  </ol>
+</div>
+
+<!-- ====== PREVENCION ====== -->
+<div class="card">
+  <h2><span class="icon">&#128737;</span> C&oacute;mo evitar que vuelva a pasar</h2>
+
+  <table>
+    <tr>
+      <th>Acci&oacute;n a evitar</th>
+      <th>Qu&eacute; hacer en su lugar</th>
+    </tr>
+    <tr>
+      <td><span class="badge badge-red">NO</span> Crear un inbox de WhatsApp nuevo para el mismo n&uacute;mero</td>
+      <td>Editar el inbox existente desde <span class="code">Settings &gt; Inboxes</span> &gt; clic en el inbox &gt; bot&oacute;n Editar</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-red">NO</span> Tocar configuraciones del inbox si los mensajes dejan de llegar sin entender la causa</td>
+      <td>Revisar los logs de Chatwoot primero para identificar el error real. Si no hay logs de <span class="code">process_payload</span> el problema est&aacute; entre Meta y Chatwoot</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-red">NO</span> Actualizar API key, borrar y recrear, tocar Meta Business sin diagn&oacute;stico previo</td>
+      <td>Solo se cambia la API key si Meta la revoc&oacute; o expir&oacute;. Si el inbox existe y est&aacute; conectado, no tocarlo</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-red">NO</span> Hacer cambios sin consultar si no est&aacute;s seguro</td>
+      <td>El impulso de "pruebo tocando esto a ver si se arregla" suele empeorar el problema</td>
+    </tr>
+  </table>
+
+  <h2 style="margin-top: 24px;"><span class="icon">&#128218;</span> Reglas de oro</h2>
+  <ul>
+    <li><strong>Siempre</strong> editar el inbox existente, nunca crear uno nuevo para el mismo n&uacute;mero.</li>
+    <li><strong>Siempre</strong> revisar los logs <span class="warn">antes</span> de tocar cualquier configuraci&oacute;n.</li>
+    <li>Si no hay logs de WhatsApp entrantes (<span class="code">process_payload</span>) en Chatwoot, el problema <strong>no es el bot</strong>, est&aacute; en Meta.</li>
+    <li>El bot s&oacute;lo falla si no ves <span class="code">WEBHOOK RECIBIDO</span> en sus logs de EasyPanel. Si lo ves pero no responde, el problema es interno del bot. Si no hay nada, el problema est&aacute; aguas arriba.</li>
+  </ul>
+</div>
+
+<!-- ====== DATOS TECNICOS ====== -->
+<div class="card">
+  <h2><span class="icon">&#128295;</span> Datos t&eacute;cnicos del incidente</h2>
+  <table>
+    <tr><td style="width:240px;">Chatwoot URL</td><td><span class="code">chatwootitalocks-chatwoot.kwng4i.easypanel.host</span></td></tr>
+    <tr><td>N&uacute;mero WhatsApp</td><td><span class="code">+51974752677</span></td></tr>
+    <tr><td>Phone Number ID (Meta)</td><td><span class="code">1116826458189955</span></td></tr>
+    <tr><td>Business Account ID (Meta)</td><td><span class="code">2040995689839459</span></td></tr>
+    <tr><td>IP de la sesi&oacute;n que cre&oacute; el duplicado</td><td><span class="code">38.253.188.117</span></td></tr>
+    <tr><td>Inbox ID en Chatwoot</td><td><span class="code">1</span></td></tr>
+    <tr><td>Bot (EasyPanel)</td><td>Danitza &mdash; Grupo Italocks &mdash; <span class="code">google/gemini-2.5-flash</span></td></tr>
+  </table>
+</div>
+
+<div class="footer">
+  Reporte generado el 11 de junio de 2026 &middot; Chatbot Meta API &middot; Grupo Italocks
+</div>
+
+</div>
+</body>
+</html>
