@@ -479,19 +479,6 @@ async def webhook(request: Request):
         logger.warning("No conversation_id en payload")
         return {"status": "ignored", "reason": "no conversation_id"}
 
-    # ── Redirección no-WhatsApp ─────────────────────────────────────────
-    conversation = payload.get("conversation", {})
-    channel = (conversation.get("channel") or "").lower()
-    if channel and "whatsapp" not in channel:
-        logger.info("Canal no-WhatsApp (%s) — redirigiendo a WhatsApp", channel)
-        redirect_msg = (
-            "¡Hola! 😊 Gracias por escribirnos. "
-            "Para atención personalizada, precios y catálogos, "
-            "escríbenos por WhatsApp: https://wa.me/51974752677"
-        )
-        await _send_to_chatwoot(conversation_id, redirect_msg)
-        return {"status": "ok", "redirected": True}
-
     # ── Pause label ─────────────────────────────────────────────────────
     labels = _get_labels_from_payload(payload)
     if labels is None:
